@@ -25,7 +25,7 @@ In the second part of the project, you have to complete the apache cassandra cod
 
 - The First Step is to create a Key Space
 
-```javascript
+```Python
 
 try:
     session.execute("""CREATE KEYSPACE IF NOT EXISTS project 
@@ -37,7 +37,7 @@ except Exception as e:
 ```
 
 Than set the Key Space
-```javascript
+```Python
 try:
     session.set_keyspace('project')
 except Exception as e:
