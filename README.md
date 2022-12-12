@@ -1,4 +1,4 @@
-# Apache-Cassandra-
+# Apache-Cassandra
 Project from Data Engineer using Apache Cassandra
 
 # Description of the Project
