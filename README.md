@@ -49,11 +49,11 @@ except Exception as e:
 I created 3 tables, one for each query. 
 
 ```Python
-music_app = "CREATE TABLE IF NOT EXISTS event_data"
-music_app = music_app + "(artist text, itemInSession int , length float, \
+query = "CREATE TABLE IF NOT EXISTS music_history"
+query = query + "(artist text, itemInSession int , length float, \
                   sessionId int, song text, PRIMARY KEY(artist, song))"
 try:
-    session.execute(music_app)
+    session.execute(query)
 except Exception as e:
     print(e)
 ```
@@ -66,15 +66,15 @@ with open(file, encoding = 'utf8') as f:
     csvreader = csv.reader(f)
     next(csvreader) 
     for line in csvreader:
-        query = "INSERT INTO event_data(artist, itemInSession, length, sessionId, song)"
-        query = query + " VALUES (%s, %s, %s, %s, %s)"
-        session.execute(query, (line[0], int(line[3]), float(line[5]), int(line[8]), line[9]))
+        Insert_query = "INSERT INTO music_history(artist, itemInSession, length, sessionId, song)"
+        Insert_query = Insert_query + " VALUES (%s, %s, %s, %s, %s)"
+        session.execute(Insert_query, (line[0], int(line[3]), float(line[5]), int(line[8]), line[9]))
 ```
 
 ### Select the Data
 
 ```Python
-query = "SELECT artist, song, length FROM event_data WHERE sessionId = 338 AND itemInSession = 4 ALLOW FILTERING;"
+query = "SELECT artist, song, length FROM music_history WHERE sessionId = 338 AND itemInSession = 4 ALLOW FILTERING;"
 try:
     rows = session.execute(query)
 except Exception as e:
@@ -92,19 +92,19 @@ At the end, you drop the tables.
 ### Drop the tables
 
 ```Python
-query = "drop table event_data"
+query = "drop table music_history"
 try:
     rows = session.execute(query)
 except Exception as e:
     print(e)
 
-query = "drop table event_data1"
+query = "drop table artist_library"
 try:
     rows = session.execute(query)
 except Exception as e:
     print(e)
     
-query = "drop table event_data2"
+query = "drop table listeners_registry"
 try:
     rows = session.execute(query)
 except Exception as e:
