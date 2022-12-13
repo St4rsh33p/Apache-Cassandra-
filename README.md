@@ -11,9 +11,7 @@ Project from Data Engineer using Apache Cassandra
 
 The first part of the project is an explanation about how to create the lifepaths to process de data files. The project itself does it for you. 
 
-I just wrote a bit of code to understand few things like which were the files i was searching for and also created a graphic representation with pandas of de datafile we were using.
-
-![image](https://user-images.githubusercontent.com/107310236/207034846-9d41e8da-7026-43da-af1b-a8dcc176d8b0.png)
+I just created a graphic representation with pandas of de datafile we were using.
 
 ![image](https://user-images.githubusercontent.com/107310236/207034941-61399f53-02be-4cad-8d74-0e13a5c63fff.png)
 
@@ -48,23 +46,29 @@ except Exception as e:
 
 ### Create Tables
 
+I created 3 tables, one for each query. 
+
 ```Python
-query = "CREATE TABLE IF NOT EXISTS event_data"
-query = query + "(artist text, firstName text, gender text , itemInSession int , lastName text, length float, level text, \
-                    location text, sessionId int, song text, userId text, PRIMARY KEY(artist, song))"
+music_app = "CREATE TABLE IF NOT EXISTS event_data"
+music_app = music_app + "(artist text, itemInSession int , length float, \
+                  sessionId int, song text, PRIMARY KEY(artist, song))"
 try:
-    session.execute(query)
+    session.execute(music_app)
 except Exception as e:
     print(e)
 ```
 ### Insert Data
 
 ```Python
-query = "INSERT INTO event_data(artist, firstName, gender, itemInSession, lastName, length,level, location, sessionId, song, userId)"
-query = query + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-## TO-DO: Assign which column element should be assigned for each column in the INSERT statement.
-## For e.g., to INSERT artist_name and user first_name, you would change the code below to `line[0], line[1]`
-session.execute(query, (line[0], line[1], line[2], int(line[3]), line[4], float(line[5]),line[6], line[7], int(line[8]), line[9],line[10]))
+file = 'event_datafile_new.csv'
+
+with open(file, encoding = 'utf8') as f:
+    csvreader = csv.reader(f)
+    next(csvreader) 
+    for line in csvreader:
+        query = "INSERT INTO event_data(artist, itemInSession, length, sessionId, song)"
+        query = query + " VALUES (%s, %s, %s, %s, %s)"
+        session.execute(query, (line[0], int(line[3]), float(line[5]), int(line[8]), line[9]))
 ```
 
 ### Select the Data
@@ -95,6 +99,12 @@ except Exception as e:
     print(e)
 
 query = "drop table event_data1"
+try:
+    rows = session.execute(query)
+except Exception as e:
+    print(e)
+    
+query = "drop table event_data2"
 try:
     rows = session.execute(query)
 except Exception as e:
